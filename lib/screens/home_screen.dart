@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rta_web/utlis/colors.dart';
 import 'package:rta_web/widgets/button_widget.dart';
 import 'package:rta_web/widgets/text_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final List<SalesData> chartData = [
+      SalesData(DateTime(2010), 35),
+      SalesData(DateTime(2011), 28),
+      SalesData(DateTime(2012), 34),
+      SalesData(DateTime(2013), 32),
+      SalesData(DateTime(2014), 40)
+    ];
     return Scaffold(
       backgroundColor: Colors.brown[50],
       body: Padding(
@@ -73,9 +81,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       10,
                     ),
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: 1000,
                     height: 350,
+                    child: SfCartesianChart(
+                        primaryXAxis: DateTimeAxis(),
+                        series: <CartesianSeries>[
+                          // Renders line chart
+                          LineSeries<SalesData, DateTime>(
+                              dataSource: chartData,
+                              xValueMapper: (SalesData sales, _) => sales.year,
+                              yValueMapper: (SalesData sales, _) => sales.sales)
+                        ]),
                   ),
                 ),
                 const SizedBox(
@@ -88,9 +105,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       10,
                     ),
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: 350,
                     height: 350,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextWidget(
+                            text: 'TOTAL ISSUED TICKET',
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          TextWidget(
+                            text: '1,532',
+                            fontSize: 75,
+                            color: Colors.black,
+                            fontFamily: 'Bold',
+                            decoration: TextDecoration.underline,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -197,4 +238,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+  final DateTime year;
+  final double sales;
 }
