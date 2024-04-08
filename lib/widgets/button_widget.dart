@@ -21,7 +21,7 @@ class ButtonWidget extends StatelessWidget {
       this.width = 275,
       this.fontSize = 18,
       this.height = 50,
-      this.color = const Color(0xffFCB315)})
+      this.color = const Color(0xff43C3FA)})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
