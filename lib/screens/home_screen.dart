@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rta_web/utlis/colors.dart';
+import 'package:rta_web/widgets/button_widget.dart';
 import 'package:rta_web/widgets/text_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,6 +58,63 @@ class _HomeScreenState extends State<HomeScreen> {
                     '301',
                     colors[i],
                   ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                  child: const SizedBox(
+                    width: 1000,
+                    height: 350,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                  child: const SizedBox(
+                    width: 350,
+                    height: 350,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (int i = 0; i < 4; i++)
+                  cardWidget(
+                    'PAID',
+                    '301',
+                    colors[i],
+                  ),
+                ButtonWidget(
+                  height: 75,
+                  width: 350,
+                  fontSize: 24,
+                  label: 'MENU',
+                  onPressed: () {},
+                  color: green,
+                ),
               ],
             ),
           ],
