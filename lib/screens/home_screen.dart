@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rta_web/utlis/colors.dart';
 import 'package:rta_web/widgets/button_widget.dart';
+import 'package:rta_web/widgets/drawer_widget.dart';
 import 'package:rta_web/widgets/text_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -31,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       SalesData(DateTime(2014), 40)
     ];
     return Scaffold(
+      drawer: const DrawerWidget(),
       backgroundColor: Colors.brown[50],
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -148,14 +150,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     '301',
                     colors[i],
                   ),
-                ButtonWidget(
-                  height: 75,
-                  width: 350,
-                  fontSize: 24,
-                  label: 'MENU',
-                  onPressed: () {},
-                  color: green,
-                ),
+                Builder(builder: (context) {
+                  return ButtonWidget(
+                    height: 75,
+                    width: 350,
+                    fontSize: 24,
+                    label: 'MENU',
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    color: green,
+                  );
+                }),
               ],
             ),
           ],

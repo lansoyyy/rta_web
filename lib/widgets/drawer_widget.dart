@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rta_web/screens/tabs/add_account_screen.dart';
 
 import '../utlis/colors.dart';
 import 'text_widget.dart';
@@ -11,7 +12,7 @@ class DrawerWidget extends StatelessWidget {
     return Container(
       height: double.infinity,
       width: 250,
-      color: Colors.blue[100],
+      color: Colors.white,
       child: SafeArea(
           child: Padding(
         padding: const EdgeInsets.only(top: 20),
@@ -22,32 +23,17 @@ class DrawerWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: primary),
-                      shape: BoxShape.circle,
-                      color: Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.5),
-                    child: Image.asset(
-                      'assets/images/RTA logo 1.png',
-                      height: 35,
-                    ),
-                  ),
-                ),
-                TextWidget(
-                  text: 'Zuc Ram Jr.',
-                  fontFamily: 'Bold',
-                  fontSize: 16,
+                const Expanded(
+                  child: SizedBox(),
                 ),
                 Builder(builder: (context) {
                   return IconButton(
                     onPressed: () {
                       Scaffold.of(context).closeDrawer();
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.menu,
-                      color: primary,
+                      color: Colors.black,
                       size: 32,
                     ),
                   );
@@ -57,24 +43,85 @@ class DrawerWidget extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
+            const Divider(),
             ListTile(
+              leading: const Icon(Icons.person_2_outlined),
               onTap: () {
                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
                 //     builder: (context) => const HomeScreen()));
               },
               title: TextWidget(
-                text: 'Help',
+                text: 'My Profile',
                 fontSize: 14,
                 fontFamily: 'Bold',
               ),
             ),
+            const Divider(),
             ListTile(
+              leading: const Icon(Icons.local_police_outlined),
+              onTap: () {
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //     builder: (context) => const HomeScreen()));
+              },
               title: TextWidget(
-                text: 'About iParkPatrol',
+                text: 'Enforcer List',
                 fontSize: 14,
                 fontFamily: 'Bold',
               ),
             ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.group_add_outlined),
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const AddAccountTab()));
+              },
+              title: TextWidget(
+                text: 'Add admin/officer/cashier',
+                fontSize: 14,
+                fontFamily: 'Bold',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.list),
+              onTap: () {
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //     builder: (context) => const HomeScreen()));
+              },
+              title: TextWidget(
+                text: 'Ticket list',
+                fontSize: 14,
+                fontFamily: 'Bold',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.warning_amber_outlined),
+              onTap: () {
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //     builder: (context) => const HomeScreen()));
+              },
+              title: TextWidget(
+                text: 'Code & Violations',
+                fontSize: 14,
+                fontFamily: 'Bold',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              onTap: () {
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //     builder: (context) => const HomeScreen()));
+              },
+              title: TextWidget(
+                text: 'About us',
+                fontSize: 14,
+                fontFamily: 'Bold',
+              ),
+            ),
+            const Divider(),
           ],
         ),
       )),
