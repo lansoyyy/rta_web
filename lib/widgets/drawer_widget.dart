@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rta_web/screens/tabs/add_account_screen.dart';
+import 'package:rta_web/screens/tabs/my_profile_tab.dart';
 
 import '../utlis/colors.dart';
 import 'text_widget.dart';
@@ -47,8 +48,8 @@ class DrawerWidget extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.person_2_outlined),
               onTap: () {
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //     builder: (context) => const HomeScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const MyProfileTab()));
               },
               title: TextWidget(
                 text: 'My Profile',
