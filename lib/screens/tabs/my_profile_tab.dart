@@ -38,26 +38,41 @@ class _MyProfileTabState extends State<MyProfileTab> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Builder(builder: (context) {
-                  return IconButton(
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: const Icon(
-                      Icons.menu,
-                    ),
-                  );
-                }),
-                TextWidget(
-                  text: 'MY PROFILE',
-                  fontSize: 18,
-                  fontFamily: 'Bold',
-                ),
-              ],
+            Container(
+              color: primary,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Builder(builder: (context) {
+                    return IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ),
+                    );
+                  }),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Image.asset(
+                    'assets/images/rta.png',
+                    height: 50,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TextWidget(
+                    text: 'ROADS AND TRAFFIC ADMINISTRATION',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: Colors.white,
+                  ),
+                ],
+              ),
             ),
             const Divider(),
             const SizedBox(

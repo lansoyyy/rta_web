@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rta_web/screens/auth/login_screen.dart';
 import 'package:rta_web/screens/home_screen.dart';
 import 'package:rta_web/screens/tabs/add_account_screen.dart';
+import 'package:rta_web/screens/tabs/alltickets_tab.dart';
+import 'package:rta_web/screens/tabs/enforcers_tab.dart';
 import 'package:rta_web/screens/tabs/my_profile_tab.dart';
 
 void main() {
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: MyProfileTab(),
+      home: EnforcersTab(),
     );
   }
 }

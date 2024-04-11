@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rta_web/screens/tabs/add_account_screen.dart';
+import 'package:rta_web/screens/tabs/alltickets_tab.dart';
+import 'package:rta_web/screens/tabs/enforcers_tab.dart';
 import 'package:rta_web/screens/tabs/my_profile_tab.dart';
 
 import '../utlis/colors.dart';
@@ -61,8 +63,8 @@ class DrawerWidget extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.local_police_outlined),
               onTap: () {
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //     builder: (context) => const HomeScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const EnforcersTab()));
               },
               title: TextWidget(
                 text: 'Enforcer List',
@@ -87,8 +89,8 @@ class DrawerWidget extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.list),
               onTap: () {
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //     builder: (context) => const HomeScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const AllTicketsTab()));
               },
               title: TextWidget(
                 text: 'Ticket list',
