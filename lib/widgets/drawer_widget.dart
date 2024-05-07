@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rta_web/screens/home_screen.dart';
 import 'package:rta_web/screens/tabs/add_account_screen.dart';
 import 'package:rta_web/screens/tabs/alltickets_tab.dart';
 import 'package:rta_web/screens/tabs/enforcers_tab.dart';
@@ -45,6 +46,19 @@ class DrawerWidget extends StatelessWidget {
             ),
             const SizedBox(
               height: 50,
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.dashboard),
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const HomeScreen()));
+              },
+              title: TextWidget(
+                text: 'Dashboard',
+                fontSize: 14,
+                fontFamily: 'Bold',
+              ),
             ),
             const Divider(),
             ListTile(
