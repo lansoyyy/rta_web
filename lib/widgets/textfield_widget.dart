@@ -102,10 +102,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           height: widget.height,
           child: TextFormField(
             enabled: widget.isEnabled,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Regular',
               fontSize: 14,
-              color: primary,
+              color: Colors.black,
             ),
             textCapitalization: widget.textCapitalization!,
             keyboardType: widget.inputType,

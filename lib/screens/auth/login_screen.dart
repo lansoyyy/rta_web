@@ -4,6 +4,7 @@ import 'package:rta_web/utlis/colors.dart';
 import 'package:rta_web/widgets/button_widget.dart';
 import 'package:rta_web/widgets/text_widget.dart';
 import 'package:rta_web/widgets/textfield_widget.dart';
+import 'package:rta_web/widgets/toast_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -167,8 +168,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ButtonWidget(
                           label: 'Enter',
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
+                            if (username.text == 'admin001' &&
+                                password.text == 'admin001') {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()));
+                            } else {
+                              showToast('Invalid admin credentials!');
+                            }
                           },
                         ),
                       ),

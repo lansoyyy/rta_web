@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rta_web/services/add_user.dart';
 import 'package:rta_web/utlis/colors.dart';
 import 'package:rta_web/widgets/button_widget.dart';
 import 'package:rta_web/widgets/drawer_widget.dart';
 import 'package:rta_web/widgets/text_widget.dart';
 import 'package:rta_web/widgets/textfield_widget.dart';
+import 'package:rta_web/widgets/toast_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AddAccountTab extends StatefulWidget {
@@ -15,6 +18,8 @@ class AddAccountTab extends StatefulWidget {
 }
 
 class _AddAccountTabState extends State<AddAccountTab> {
+  String _selectedOption = 'Officer';
+  String _selectedOption1 = 'Male';
   final fname = TextEditingController();
   final lname = TextEditingController();
   final email = TextEditingController();
@@ -29,6 +34,8 @@ class _AddAccountTabState extends State<AddAccountTab> {
   final admin = TextEditingController();
   final code = TextEditingController();
 
+  bool isVerified = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +45,7 @@ class _AddAccountTabState extends State<AddAccountTab> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-           Container(
+            Container(
               color: primary,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -95,7 +102,7 @@ class _AddAccountTabState extends State<AddAccountTab> {
                       child: Column(
                         children: [
                           TextWidget(
-                            text: 'CREATE CASHIER',
+                            text: 'CREATE USER',
                             fontSize: 28,
                             fontFamily: 'Bold',
                           ),
@@ -110,7 +117,7 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWidget(
-                                    text: 'Add New Cashier Account',
+                                    text: 'Add New User Account',
                                     fontSize: 22,
                                     fontFamily: 'Bold',
                                   ),
@@ -141,10 +148,86 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  TextFieldWidget(
-                                    width: 500,
-                                    controller: email,
-                                    label: 'Email',
+                                  Row(
+                                    children: [
+                                      TextFieldWidget(
+                                        controller: email,
+                                        label: 'Email',
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          RichText(
+                                            text: const TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: 'User Type',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' *',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            width: 275,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: DropdownButton<String>(
+                                                underline: const SizedBox(),
+                                                value: _selectedOption,
+                                                hint: const Text(
+                                                    'Select user type'),
+                                                items: <String>[
+                                                  'Officer',
+                                                  'Cashier'
+                                                ].map((String value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    _selectedOption = newValue!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -176,10 +259,77 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      TextFieldWidget(
-                                        controller: gender,
-                                        label: 'Gender',
-                                      )
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          RichText(
+                                            text: const TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: 'Gender',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' *',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            width: 275,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: DropdownButton<String>(
+                                                underline: const SizedBox(),
+                                                value: _selectedOption1,
+                                                hint:
+                                                    const Text('Select gender'),
+                                                items: <String>[
+                                                  'Male',
+                                                  'Female'
+                                                ].map((String value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    _selectedOption1 =
+                                                        newValue!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(
@@ -224,19 +374,35 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Center(
-                                      child: ButtonWidget(
-                                        height: 50,
-                                        width: 500,
-                                        fontSize: 16,
-                                        label: 'CONTINUE',
-                                        onPressed: () {},
-                                        color: green,
-                                      ),
-                                    ),
-                                  ),
+                                  isVerified
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: Center(
+                                            child: ButtonWidget(
+                                              height: 50,
+                                              width: 500,
+                                              fontSize: 16,
+                                              label: 'CONTINUE',
+                                              onPressed: () {
+                                                if (password.text ==
+                                                    confirmpassword.text) {
+                                                  if (isVerified) {
+                                                    register(context);
+                                                  } else {
+                                                    showToast(
+                                                        'Please input verification first!');
+                                                  }
+                                                } else {
+                                                  showToast(
+                                                      'Password do not match!');
+                                                }
+                                              },
+                                              color: green,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(),
                                 ],
                               ),
                               const SizedBox(
@@ -266,7 +432,9 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                         children: [
                                           Center(
                                             child: TextWidget(
-                                              text: 'APPROVAL',
+                                              text: isVerified
+                                                  ? 'APPROVED'
+                                                  : 'APPROVAL',
                                               fontSize: 18,
                                               fontFamily: 'Bold',
                                               color: primary,
@@ -318,12 +486,28 @@ class _AddAccountTabState extends State<AddAccountTab> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          Center(
-                                            child: ButtonWidget(
-                                              label: 'Confirm',
-                                              onPressed: () {},
-                                            ),
-                                          ),
+                                          !isVerified
+                                              ? Center(
+                                                  child: ButtonWidget(
+                                                    label: 'Confirm',
+                                                    onPressed: () {
+                                                      if (admin.text ==
+                                                              'admin001' &&
+                                                          code.text ==
+                                                              'admin001') {
+                                                        showToast(
+                                                            'Credentials approved!');
+                                                        setState(() {
+                                                          isVerified = true;
+                                                        });
+                                                      } else {
+                                                        showToast(
+                                                            'Invalied credentials!');
+                                                      }
+                                                    },
+                                                  ),
+                                                )
+                                              : const SizedBox(),
                                         ],
                                       ),
                                     ),
@@ -346,5 +530,40 @@ class _AddAccountTabState extends State<AddAccountTab> {
         ),
       ),
     );
+  }
+
+  register(context) async {
+    try {
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: '${username.text}@rta.com', password: password.text);
+
+      addUser(
+          fname.text,
+          lname.text,
+          email.text,
+          _selectedOption,
+          badge.text,
+          position.text,
+          station.text,
+          _selectedOption1,
+          username.text,
+          user.user!.uid);
+
+      showToast('Account created succesfully!');
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const AddAccountTab()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showToast('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showToast('The account already exists for that email.');
+      } else if (e.code == 'invalid-email') {
+        showToast('The email address is not valid.');
+      } else {
+        showToast(e.toString());
+      }
+    } on Exception catch (e) {
+      showToast("An error occurred: $e");
+    }
   }
 }

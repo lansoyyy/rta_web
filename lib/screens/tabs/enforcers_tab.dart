@@ -107,10 +107,6 @@ class _EnforcersTabState extends State<EnforcersTab> {
                                         onPressed: () {},
                                         icon: const Icon(Icons.refresh),
                                       ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.more_vert),
-                                      ),
                                       const SizedBox(
                                         width: 20,
                                       ),
@@ -133,7 +129,7 @@ class _EnforcersTabState extends State<EnforcersTab> {
                                                 width: 10,
                                               ),
                                               TextWidget(
-                                                text: 'Man',
+                                                text: 'Officer',
                                                 fontSize: 14,
                                               ),
                                             ],
@@ -151,54 +147,7 @@ class _EnforcersTabState extends State<EnforcersTab> {
                                                 width: 10,
                                               ),
                                               TextWidget(
-                                                text: 'Woman',
-                                                fontSize: 14,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.circle,
-                                                color: Colors.amber,
-                                                size: 15,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              TextWidget(
-                                                text: 'Others',
-                                                fontSize: 14,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.circle,
-                                                color: Colors.red,
-                                                size: 15,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              TextWidget(
-                                                text: 'Admin',
+                                                text: 'Cashier',
                                                 fontSize: 14,
                                               ),
                                             ],
@@ -209,7 +158,7 @@ class _EnforcersTabState extends State<EnforcersTab> {
                                         width: 100,
                                       ),
                                       TextWidget(
-                                        text: 'Admin & Officers',
+                                        text: 'Cashiers & Officers',
                                         fontSize: 18,
                                         fontFamily: 'Bold',
                                       ),

@@ -62,19 +62,6 @@ class DrawerWidget extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.person_2_outlined),
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const MyProfileTab()));
-              },
-              title: TextWidget(
-                text: 'My Profile',
-                fontSize: 14,
-                fontFamily: 'Bold',
-              ),
-            ),
-            const Divider(),
-            ListTile(
               leading: const Icon(Icons.local_police_outlined),
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
