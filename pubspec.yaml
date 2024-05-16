@@ -37,6 +37,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   fluttertoast:
   syncfusion_flutter_charts: ^22.2.12
+  firebase_core:
+  cloud_firestore:
+  firebase_storage:
+  firebase_auth:
+  get_storage:
+  intl:
 
 dev_dependencies:
   flutter_test:
