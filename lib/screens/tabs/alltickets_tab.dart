@@ -31,75 +31,132 @@ class _AllTicketsTabState extends State<AllTicketsTab> {
   final admin = TextEditingController();
   final code = TextEditingController();
 
+  final searchController = TextEditingController();
+  String nameSearched = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerWidget(),
       backgroundColor: Colors.brown[50],
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('Tickets').snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              print(snapshot.error);
-              return const Center(child: Text('Error'));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.black,
-                )),
-              );
-            }
-
-            final data = snapshot.requireData;
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Container(
+              color: primary,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    color: primary,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Builder(builder: (context) {
-                          return IconButton(
-                            onPressed: () {
-                              Scaffold.of(context).openDrawer();
-                            },
-                            icon: const Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                            ),
-                          );
-                        }),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Image.asset(
-                          'assets/images/rta.png',
-                          height: 50,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TextWidget(
-                          text: 'ROADS AND TRAFFIC ADMINISTRATION',
-                          fontSize: 18,
-                          fontFamily: 'Bold',
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
+                  Builder(builder: (context) {
+                    return IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ),
+                    );
+                  }),
                   const SizedBox(
-                    height: 10,
+                    width: 20,
+                  ),
+                  Image.asset(
+                    'assets/images/rta.png',
+                    height: 50,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TextWidget(
+                    text: 'ROADS AND TRAFFIC ADMINISTRATION',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: Colors.white,
+                  ),
+                  const Expanded(
+                    child: SizedBox(),
                   ),
                   Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 10, 50, 20),
+                    child: Container(
+                      height: 50,
+                      width: 350,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: TextFormField(
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Regular',
+                              fontSize: 14),
+                          onChanged: (value) {
+                            setState(() {
+                              nameSearched = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.grey[200],
+                              labelStyle: const TextStyle(
+                                color: Colors.white,
+                              ),
+                              hintText: 'Search Reference Number',
+                              hintStyle: const TextStyle(
+                                  fontFamily: 'Bold', color: Colors.black),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.black,
+                              )),
+                          controller: searchController,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Tickets')
+                    .where('refno',
+                        isGreaterThanOrEqualTo:
+                            toBeginningOfSentenceCase(nameSearched))
+                    .where('refno',
+                        isLessThan:
+                            '${toBeginningOfSentenceCase(nameSearched)}z')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.black,
+                      )),
+                    );
+                  }
+
+                  final data = snapshot.requireData;
+                  return Padding(
                     padding: const EdgeInsets.fromLTRB(50, 20, 50, 20),
                     child: Card(
                       elevation: 5,
@@ -306,7 +363,15 @@ class _AllTicketsTabState extends State<AllTicketsTab> {
                                                       ),
                                                       TextWidget(
                                                         text:
-                                                            '₱${data.docs[i]['violations'].fold(0.0, (prev, element) => prev + double.parse(element['fine']))}',
+                                                            'P${data.docs[i]['violations'].fold(0.0, (prev, element) {
+                                                          String fine = element[
+                                                                  'fine']
+                                                              .replaceAll(',',
+                                                                  ''); // Remove commas
+                                                          return prev +
+                                                              double.parse(
+                                                                  fine);
+                                                        })}',
                                                         fontSize: 18,
                                                       ),
                                                     ],
@@ -328,14 +393,14 @@ class _AllTicketsTabState extends State<AllTicketsTab> {
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            );
-          }),
+                  );
+                }),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

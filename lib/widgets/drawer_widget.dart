@@ -113,19 +113,6 @@ class DrawerWidget extends StatelessWidget {
               ),
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.info_outline),
-              onTap: () {
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //     builder: (context) => const HomeScreen()));
-              },
-              title: TextWidget(
-                text: 'About us',
-                fontSize: 14,
-                fontFamily: 'Bold',
-              ),
-            ),
-            const Divider(),
           ],
         ),
       )),
