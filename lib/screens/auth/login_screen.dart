@@ -96,6 +96,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 370,
                   height: 400,
                   decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      opacity: 0.05,
+                      image: AssetImage(
+                        'assets/images/rta.png',
+                      ),
+                      fit: BoxFit.fitHeight,
+                    ),
                     border: Border.all(
                       color: primary,
                       width: 2,
