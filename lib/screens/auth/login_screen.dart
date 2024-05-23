@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rta_web/screens/cashier_home_screen.dart';
 import 'package:rta_web/screens/home_screen.dart';
 import 'package:rta_web/screens/tabs/my_profile_tab.dart';
 import 'package:rta_web/utlis/colors.dart';
@@ -297,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               } else {
                                 showToast('Invalid admin credentials!');
                               }
-                            } else if (isuser) {
+                            } else {
                               login(context);
                             }
                           },
@@ -320,8 +321,13 @@ class _LoginScreenState extends State<LoginScreen> {
           email: '${username.text}@rta.com', password: password.text);
       showToast('Logged in succesfully!');
 
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MyProfileTab()));
+      if (isuser) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const MyProfileTab()));
+      } else {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const CashierHomeScreen()));
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showToast("No user found with that email.");
