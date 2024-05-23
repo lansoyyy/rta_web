@@ -51,231 +51,248 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: const DrawerWidget(),
       backgroundColor: Colors.brown[50],
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: primary,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              'assets/images/back.png',
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: primary,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Builder(builder: (context) {
+                      return IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        icon: const Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Image.asset(
+                      'assets/images/rta.png',
+                      height: 50,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    TextWidget(
+                      text: 'ROADS AND TRAFFIC ADMINISTRATION',
+                      fontSize: 18,
+                      fontFamily: 'Bold',
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 50, right: 50),
+                child: Scrollbar(
+                  controller: scroll,
+                  child: SingleChildScrollView(
+                    controller: scroll,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        for (int i = 0; i < violations.length; i++)
+                          cardWidget1(
+                            violations[i],
+                            '301',
+                            colors[i],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Builder(builder: (context) {
-                    return IconButton(
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                      icon: const Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                      ),
-                    );
-                  }),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Tickets')
+                          .orderBy('dateTime', descending: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return const Center(child: Text('Error'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.black,
+                            )),
+                          );
+                        }
+
+                        final data = snapshot.requireData;
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: 1000,
+                            height: 350,
+                            child: SfCartesianChart(
+                                primaryXAxis: DateTimeAxis(),
+                                series: <CartesianSeries>[
+                                  // Renders line chart
+                                  LineSeries<SalesData, DateTime>(
+                                      dataSource: [
+                                        for (int i = 0;
+                                            i < data.docs.length;
+                                            i++)
+                                          SalesData(
+                                              data.docs[i]['dateTime'].toDate(),
+                                              data.docs.length.toDouble())
+                                      ],
+                                      xValueMapper: (SalesData sales, _) =>
+                                          sales.year,
+                                      yValueMapper: (SalesData sales, _) =>
+                                          sales.sales)
+                                ]),
+                          ),
+                        );
+                      }),
                   const SizedBox(
                     width: 20,
                   ),
-                  Image.asset(
-                    'assets/images/rta.png',
-                    height: 50,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  TextWidget(
-                    text: 'ROADS AND TRAFFIC ADMINISTRATION',
-                    fontSize: 18,
-                    fontFamily: 'Bold',
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 50, right: 50),
-              child: Scrollbar(
-                controller: scroll,
-                child: SingleChildScrollView(
-                  controller: scroll,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      for (int i = 0; i < violations.length; i++)
-                        cardWidget1(
-                          violations[i],
-                          '301',
-                          colors[i],
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Tickets')
-                        .orderBy('dateTime', descending: true)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        print(snapshot.error);
-                        return const Center(child: Text('Error'));
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 50),
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: Colors.black,
-                          )),
-                        );
-                      }
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Tickets')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return const Center(child: Text('Error'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.black,
+                            )),
+                          );
+                        }
 
-                      final data = snapshot.requireData;
-                      return Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: 1000,
-                          height: 350,
-                          child: SfCartesianChart(
-                              primaryXAxis: DateTimeAxis(),
-                              series: <CartesianSeries>[
-                                // Renders line chart
-                                LineSeries<SalesData, DateTime>(
-                                    dataSource: [
-                                      for (int i = 0; i < data.docs.length; i++)
-                                        SalesData(
-                                            data.docs[i]['dateTime'].toDate(),
-                                            data.docs.length.toDouble())
-                                    ],
-                                    xValueMapper: (SalesData sales, _) =>
-                                        sales.year,
-                                    yValueMapper: (SalesData sales, _) =>
-                                        sales.sales)
-                              ]),
-                        ),
-                      );
-                    }),
-                const SizedBox(
-                  width: 20,
-                ),
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Tickets')
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        print(snapshot.error);
-                        return const Center(child: Text('Error'));
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 50),
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: Colors.black,
-                          )),
-                        );
-                      }
-
-                      final data = snapshot.requireData;
-                      return Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: 350,
-                          height: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TextWidget(
-                                  text: 'TOTAL ISSUED TICKET',
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(
-                                  height: 100,
-                                ),
-                                TextWidget(
-                                  text: data.docs.length.toString(),
-                                  fontSize: 75,
-                                  color: Colors.black,
-                                  fontFamily: 'Bold',
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ],
+                        final data = snapshot.requireData;
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
                             ),
                           ),
-                        ),
-                      );
-                    }),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (int i = 0; i < 4; i++)
-                  cardWidget(
-                    i == 0
-                        ? 'Paid'
-                        : i == 1
-                            ? 'Standby'
-                            : i == 2
-                                ? 'Warning'
-                                : 'Unpaid',
-                    i == 0
-                        ? 'Paid'
-                        : i == 1
-                            ? 'Standby'
-                            : i == 2
-                                ? 'Warning'
-                                : 'Unpaid',
-                    colors[i],
-                  ),
-                Builder(builder: (context) {
-                  return ButtonWidget(
-                    height: 75,
-                    width: 350,
-                    fontSize: 24,
-                    label: 'MENU',
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    color: green,
-                  );
-                }),
-              ],
-            ),
-          ],
+                          child: SizedBox(
+                            width: 350,
+                            height: 350,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextWidget(
+                                    text: 'TOTAL ISSUED TICKET',
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(
+                                    height: 100,
+                                  ),
+                                  TextWidget(
+                                    text: data.docs.length.toString(),
+                                    fontSize: 75,
+                                    color: Colors.black,
+                                    fontFamily: 'Bold',
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 4; i++)
+                    cardWidget(
+                      i == 0
+                          ? 'Paid'
+                          : i == 1
+                              ? 'Standby'
+                              : i == 2
+                                  ? 'Warning'
+                                  : 'Unpaid',
+                      i == 0
+                          ? 'Paid'
+                          : i == 1
+                              ? 'Standby'
+                              : i == 2
+                                  ? 'Warning'
+                                  : 'Unpaid',
+                      colors[i],
+                    ),
+                  Builder(builder: (context) {
+                    return ButtonWidget(
+                      height: 75,
+                      width: 350,
+                      fontSize: 24,
+                      label: 'MENU',
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      color: green,
+                    );
+                  }),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
