@@ -567,6 +567,9 @@ class _MyProfileTabState extends State<MyProfileTab> {
                                 StreamBuilder<QuerySnapshot>(
                                     stream: FirebaseFirestore.instance
                                         .collection('Tickets')
+                                        .where('uid',
+                                            isEqualTo: FirebaseAuth
+                                                .instance.currentUser!.uid)
                                         .where('refno',
                                             isGreaterThanOrEqualTo:
                                                 toBeginningOfSentenceCase(
