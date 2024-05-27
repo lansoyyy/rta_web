@@ -83,7 +83,7 @@ class DrawerWidget extends StatelessWidget {
                     builder: (context) => const AddAccountTab()));
               },
               title: TextWidget(
-                text: 'Add admin/officer/cashier',
+                text: 'Add Officer/Cashier',
                 fontSize: 14,
                 fontFamily: 'Bold',
               ),
