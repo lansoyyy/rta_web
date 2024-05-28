@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rta_web/screens/cashier_home_screen.dart';
@@ -340,16 +341,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login(context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: '${username.text}@rta.com', password: password.text);
-      showToast('Logged in succesfully!');
+
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.user!.uid)
+          .get();
 
       if (isuser) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const MyProfileTab()));
+        if (doc['type'] == 'Officer') {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const MyProfileTab()));
+          showToast('Logged in succesfully!');
+        } else {
+          showToast('Invalid account! Wrong credentials');
+        }
       } else {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const CashierHomeScreen()));
+        if (doc['type'] == 'Cashier') {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const CashierHomeScreen()));
+          showToast('Logged in succesfully!');
+        } else {
+          showToast('Invalid account! Wrong credentials');
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
